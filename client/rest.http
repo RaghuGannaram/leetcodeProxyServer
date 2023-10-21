@@ -1,0 +1,7 @@
+###  health-check
+GET http://localhost:5000/api/v1/health-check HTTP/1.1
+
+
+###  user
+GET http://localhost:5000/api/v1/streak-check HTTP/1.1
+Content-Type: application/json

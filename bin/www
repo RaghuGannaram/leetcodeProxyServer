@@ -1,0 +1,38 @@
+const http = require("http");
+const chalk = require("chalk");
+const app = require("../server");
+const logger = require("../configs/winston.config");
+const { getCurrentPort } = require("../utils/env-info");
+
+const server = http.createServer(app);
+const port = getCurrentPort();
+
+server.listen(port);
+
+server.on("error", (error) => {
+    console.log("Error on node.js ...!", error);
+
+    if (error.syscall !== "listen") throw error;
+
+    switch (error.code) {
+        case "EACCES":
+            console.error("Requires elevated privileges.");
+            process.exit(1);
+
+        case "EADDRINUSE":
+            console.error(port + " is already in use.");
+            process.exit(1);
+
+        default:
+            throw error;
+    }
+});
+
+server.on("listening", () => {
+    const { address, port, family } = server.address();
+
+    logger.info("server is up and running...🚀");
+    logger.info("server address: " + chalk.magenta(address));
+    logger.info("server port: " + chalk.magenta(port));
+    logger.info("server family: " + chalk.magenta(family));
+});
